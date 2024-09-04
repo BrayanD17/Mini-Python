@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/NavBar.css';
 import logo from '../image/MiniPython.png';
 
-const NavBar = () => {
+const NavBar = ({ onNavClick }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -10,8 +10,9 @@ const NavBar = () => {
         <span className="navbar-title">Mini-python IDE online</span>
       </div>
       <ul className="navbar-menu">
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a href="#ide" onClick={() => onNavClick('IDE')}>IDE</a></li>
+        <li><a href="#contact" onClick={() => onNavClick('Contact')}>Contact</a></li>
+        <li><a href="#about" onClick={() => onNavClick('About')}>About</a></li>
       </ul>
     </nav>
   );

@@ -1,0 +1,65 @@
+.contact-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.info-brayan, .info-nicole {
+  flex: 1;
+  margin: 10px;
+  text-align: center; /* Centra el texto y los íconos dentro de cada contenedor */
+}
+
+.contact-header {
+  display: flex;
+  flex-direction: column; /* Alinea imagen y nombre verticalmente */
+  align-items: center; /* Centra horizontalmente */
+}
+
+.contact-image {
+  width: 80px;
+  height: 80px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombreado */
+  margin-bottom: 10px; /* Espacio debajo de la imagen */
+}
+
+.contact-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.contact-details {
+  margin-top: 20px; /* Espacio arriba del contenedor de detalles */
+}
+
+.contact-details p {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente el texto y los íconos */
+  align-items: center;
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.contact-details p svg {
+  margin-right: 8px;
+  width: 24px;
+  height: 24px;
+  color: #333; /* Ajusta el color de los íconos aquí */
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px; /* Espacio arriba del contenedor de enlaces sociales */
+}
+
+.social-links a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px; /* Tamaño de los íconos */
+  color: #333; /* Color de los íconos */
+}

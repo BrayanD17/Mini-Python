@@ -1,11 +1,11 @@
 import React from 'react';
-import NavBar from './components/Navbar';
-import CodeEditorPanel from './components/CodeEditorPanel';
+import Main from './components/MainComponent';
+import './App.css';  // Asegúrate de incluir tus estilos si los tienes
+
 function App() {
   return (
     <div className="App">
-      <NavBar />
-      <CodeEditorPanel/>
+      <Main />
     </div>
   );
 }
