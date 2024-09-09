@@ -4,12 +4,13 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-github';
 import { v4 as uuidv4 } from 'uuid';
 import { Plus, X, Play } from 'lucide-react'; // Importa los íconos
-import ConsolePanel from './ConsolPanel';
+import ConsolePanel from './ConsolPanel'; // Asegúrate de que el nombre sea correcto
 import '../css/CodeEditorPanel.css';
 
 const CodeEditorPanel = () => {
   const [editors, setEditors] = useState([{ id: uuidv4(), name: 'Untitled', code: '' }]);
   const [activeTab, setActiveTab] = useState(editors[0]?.id || null);
+  const [consoleOutput, setConsoleOutput] = useState('');
 
   const addEditor = () => {
     const newEditor = { id: uuidv4(), name: 'Untitled', code: '' };
@@ -43,6 +44,29 @@ const CodeEditorPanel = () => {
     setActiveTab(id);
   };
 
+  const runCode = async (code) => {
+    try {
+      const response = await fetch('http://localhost:5052/parse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }), // Enviar el código como parte del objeto JSON
+      });
+  
+      if (response.ok) {
+        const result = await response.text();
+        setConsoleOutput(result);
+      } else {
+        const error = await response.json();
+        setConsoleOutput(`Error: ${error.error}\nDetails: ${error.details}`);
+      }
+    } catch (error) {
+      setConsoleOutput(`Network error: ${error.message}`);
+    }
+  };
+   
+  
   return (
     <div className="code-editor-panel">
       <div className="tabs">
@@ -85,10 +109,10 @@ const CodeEditorPanel = () => {
                   }}
                 />
               </div>
-              <ConsolePanel /> {/* Consola asociada con esta pestaña */}
+              <ConsolePanel output={consoleOutput} /> {/* Consola asociada con esta pestaña */}
             </div>
             <div className="editor-footer">
-              <button className="run-button" onClick={() => console.log('Play', editor.code)}>
+              <button className="run-button" onClick={() => runCode(editor.code)}>
                 <Play size={16} /> Run
               </button>
             </div>
