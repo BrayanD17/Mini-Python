@@ -1,27 +1,29 @@
 .console-panel {
-    flex: 1; /* Ocupa una fracción del contenedor del IDE */
-    display: flex;
-    flex-direction: column;
-    background-color: #2d2d2d; /* Color de fondo negro para la consola */
-    color: #ffffff; /* Texto blanco */
-    padding: 10px;
-    border-top: 2px solid #444; /* Borde para separar la consola del editor */
-    height: 50%; /* Ajusta la altura al 50% del contenedor principal */
-    min-height: 200px; /* Establece una altura mínima para la consola */
-  }
-  
-  .console-header {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #00bcd4; /* Título de la consola en color cian */
-  }
-  
-  .console-output {
-    flex: 1;
-    background-color: #000000; /* Fondo negro profundo para el área de salida */
-    padding: 10px;
-    overflow-y: auto; /* Agrega scroll vertical si el contenido excede el tamaño */
-    border-radius: 5px;
-    font-family: monospace;
-  }
-  
+  flex: 1; /* Ocupa una fracción del contenedor del IDE */
+  display: flex;
+  flex-direction: column;
+  background-color: #2d2d2d; /* Color de fondo negro para la consola */
+  color: #ffffff; /* Texto blanco */
+  padding: 10px;
+  border-top: 2px solid #444; /* Borde para separar la consola del editor */
+  height: 50%; /* Ajusta la altura al 50% del contenedor principal */
+  min-height: 200px; /* Establece una altura mínima para la consola */
+}
+
+.console-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #00bcd4; /* Título de la consola en color cian */
+}
+
+.console-output {
+  flex: 1;
+  background-color: #000000; /* Fondo negro profundo para el área de salida */
+  padding: 10px;
+  overflow-y: auto; /* Agrega scroll vertical si el contenido excede el tamaño */
+  border-radius: 5px;
+  font-family: monospace;
+  white-space: pre-wrap; /* Mantiene los saltos de línea y el formato de espacios */
+  text-align: left; /* Alinea el texto a la izquierda */
+  word-break: break-word; /* Rompe las palabras largas si es necesario */
+}

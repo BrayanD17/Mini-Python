@@ -59,13 +59,18 @@ const CodeEditorPanel = () => {
         setConsoleOutput(result);
       } else {
         const error = await response.json();
-        setConsoleOutput(`Error: ${error.error}\nDetails: ${error.details}`);
+  
+        // Separar cada error con un salto de línea al encontrar la palabra "Error"
+        const formattedError = error.details.split("Error").join("\nError");
+  
+        setConsoleOutput(`Error: ${error.error}\nDetails: ${formattedError}`);
       }
     } catch (error) {
       setConsoleOutput(`Network error: ${error.message}`);
     }
   };
-   
+  
+    
   
   return (
     <div className="code-editor-panel">
