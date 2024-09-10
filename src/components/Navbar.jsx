@@ -12,7 +12,7 @@ const NavBar = ({ onNavClick }) => {
       <ul className="navbar-menu">
         <li><a href="#ide" onClick={() => onNavClick('IDE')}>IDE</a></li>
         <li><a href="#contact" onClick={() => onNavClick('Contact')}>Contact</a></li>
-        <li><a href="#about" onClick={() => onNavClick('About')}>About</a></li>
+        <li><a href="#about" onClick={() => onNavClick('About')}>About</a></li> 
       </ul>
     </nav>
   );

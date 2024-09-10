@@ -3,14 +3,15 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-github';
 import { v4 as uuidv4 } from 'uuid';
-import { Plus, X, Play } from 'lucide-react'; // Importa los íconos
-import ConsolePanel from './ConsolPanel'; // Asegúrate de que el nombre sea correcto
+import { Plus, X, Play } from 'lucide-react';
+import ConsolePanel from './ConsolPanel';
 import '../css/CodeEditorPanel.css';
 
 const CodeEditorPanel = () => {
   const [editors, setEditors] = useState([{ id: uuidv4(), name: 'Untitled', code: '' }]);
   const [activeTab, setActiveTab] = useState(editors[0]?.id || null);
   const [consoleOutput, setConsoleOutput] = useState('');
+  const [markers, setMarkers] = useState([]); // Nueva variable de estado para los markers
 
   const addEditor = () => {
     const newEditor = { id: uuidv4(), name: 'Untitled', code: '' };
@@ -53,25 +54,47 @@ const CodeEditorPanel = () => {
         },
         body: JSON.stringify({ code }), // Enviar el código como parte del objeto JSON
       });
-  
+
       if (response.ok) {
         const result = await response.text();
         setConsoleOutput(result);
+        setMarkers([]); // Limpiar los markers si no hay errores
       } else {
         const error = await response.json();
-  
-        // Separar cada error con un salto de línea al encontrar la palabra "Error"
         const formattedError = error.details.split("Error").join("\nError");
-  
+
         setConsoleOutput(`Error: ${error.error}\nDetails: ${formattedError}`);
+
+        // Procesar los errores y establecer markers
+        const errorLines = formattedError.split("\n").map(line => {
+          const match = line.match(/línea (\d+):(\d+)/);
+          if (match) {
+            return {
+              row: parseInt(match[1], 10) - 1, // Las líneas en AceEditor son 0-indexadas
+              column: parseInt(match[2], 10),
+              type: 'error', // Podrías usar diferentes tipos como 'warning' si fuese necesario
+              text: line
+            };
+          }
+          return null;
+        }).filter(marker => marker !== null);
+
+        const newMarkers = errorLines.map(errorLine => ({
+          startRow: errorLine.row,
+          startCol: 0,
+          endRow: errorLine.row,
+          endCol: 1,
+          className: 'error-marker',
+          type: 'text'
+        }));
+
+        setMarkers(newMarkers); // Establecer los markers
       }
     } catch (error) {
       setConsoleOutput(`Network error: ${error.message}`);
     }
   };
-  
-    
-  
+
   return (
     <div className="code-editor-panel">
       <div className="tabs">
@@ -112,6 +135,7 @@ const CodeEditorPanel = () => {
                     showGutter: true, 
                     useWorker: false
                   }}
+                  markers={markers} // Pasar los markers al editor
                 />
               </div>
               <ConsolePanel output={consoleOutput} /> {/* Consola asociada con esta pestaña */}
