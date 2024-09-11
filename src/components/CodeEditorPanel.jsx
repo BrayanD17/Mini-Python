@@ -11,7 +11,7 @@ const CodeEditorPanel = () => {
   const [editors, setEditors] = useState([{ id: uuidv4(), name: 'Untitled', code: '' }]);
   const [activeTab, setActiveTab] = useState(editors[0]?.id || null);
   const [consoleOutput, setConsoleOutput] = useState('');
-  const [markers, setMarkers] = useState([]); // Nueva variable de estado para los markers
+  const [markers, setMarkers] = useState([]);
 
   const addEditor = () => {
     const newEditor = { id: uuidv4(), name: 'Untitled', code: '' };
@@ -52,13 +52,13 @@ const CodeEditorPanel = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }), // Enviar el código como parte del objeto JSON
+        body: JSON.stringify({ code }), 
       });
 
       if (response.ok) {
         const result = await response.text();
         setConsoleOutput(result);
-        setMarkers([]); // Limpiar los markers si no hay errores
+        setMarkers([]);
       } else {
         const error = await response.json();
         const formattedError = error.details.split("Error").join("\nError");
@@ -72,7 +72,7 @@ const CodeEditorPanel = () => {
             return {
               row: parseInt(match[1], 10) - 1, // Las líneas en AceEditor son 0-indexadas
               column: parseInt(match[2], 10),
-              type: 'error', // Podrías usar diferentes tipos como 'warning' si fuese necesario
+              type: 'error',
               text: line
             };
           }

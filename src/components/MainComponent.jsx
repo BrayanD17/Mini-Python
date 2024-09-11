@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import NavBar from '../components/Navbar'; // Corregido el nombre del archivo
+import NavBar from '../components/Navbar';
 import ContactComponent from '../components/Contact';
 import CodeEditorPanel from '../components/CodeEditorPanel';
-import About from '../components/About'; // Importa el componente About
+import About from '../components/About'
 
 const MainComponent = () => {
-  // Establece 'IDE' como el componente activo por defecto
   const [activeComponent, setActiveComponent] = useState('IDE');
 
   const handleNavClick = (componentName) => {
@@ -17,7 +16,7 @@ const MainComponent = () => {
       <NavBar onNavClick={handleNavClick} />
       {activeComponent === 'IDE' && <CodeEditorPanel />}
       {activeComponent === 'Contact' && <ContactComponent />}
-      {activeComponent === 'About' && <About />} {/* Añadido el componente About */}
+      {activeComponent === 'About' && <About />}
     </div>
   );
 };
