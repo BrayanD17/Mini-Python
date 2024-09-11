@@ -129,11 +129,12 @@
 .run-button:hover {
     background-color: #218838;
 }
-.ace_error-marker {
+.ace_marker-layer .error-marker {
     position: absolute;
-    background-color: rgba(255, 0, 0, 0.3); /* Rojo translúcido */
+    background-color: rgba(255, 0, 0, 0.3);
     z-index: 20;
-  }
+}
+
 .keyword {
     color: blue;
     font-weight: bold;

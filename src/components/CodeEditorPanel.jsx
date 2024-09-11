@@ -13,36 +13,16 @@ const CodeEditorPanel = () => {
   const [consoleOutput, setConsoleOutput] = useState('');
   const [markers, setMarkers] = useState([]);
 
-  const addEditor = () => {
-    const newEditor = { id: uuidv4(), name: 'Untitled', code: '' };
-    setEditors([...editors, newEditor]);
-    setActiveTab(newEditor.id);
-  };
-
-  const removeEditor = (id) => {
-    const newEditors = editors.filter(editor => editor.id !== id);
-    setEditors(newEditors);
-    if (newEditors.length > 0) {
-      setActiveTab(newEditors[0].id);
-    } else {
-      setActiveTab(null);
-    }
-  };
-
-  const renameEditor = (id, newName) => {
-    setEditors(editors.map(editor => 
-      editor.id === id ? { ...editor, name: newName } : editor
-    ));
-  };
-
-  const handleCodeChange = (id, newCode) => {
-    setEditors(editors.map(editor => 
-      editor.id === id ? { ...editor, code: newCode } : editor
-    ));
-  };
-
-  const handleTabClick = (id) => {
-    setActiveTab(id);
+  const handleLineClick = (lineNumber) => {
+    // Establecer el marcador para resaltar la línea en el editor
+    setMarkers([{
+      startRow: lineNumber - 1,
+      startCol: 0,
+      endRow: lineNumber - 1,
+      endCol: 1,
+      className: 'error-marker',
+      type: 'fullLine'
+    }]);
   };
 
   const runCode = async (code) => {
@@ -52,43 +32,29 @@ const CodeEditorPanel = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }), 
+        body: JSON.stringify({ code }),
       });
 
       if (response.ok) {
-        const result = await response.text();
-        setConsoleOutput(result);
+        setConsoleOutput("Parsing completed successfully.");
         setMarkers([]);
       } else {
         const error = await response.json();
-        const formattedError = error.details.split("Error").join("\nError");
+        const formattedError = error.details.map(detail =>
+          `Error: Line ${detail.line}:${detail.column}\nDetails: ${detail.message}`).join("\n");
 
-        setConsoleOutput(`Error: ${error.error}\nDetails: ${formattedError}`);
+        setConsoleOutput(`Parsing failed:\n${formattedError}`);
 
-        // Procesar los errores y establecer markers
-        const errorLines = formattedError.split("\n").map(line => {
-          const match = line.match(/línea (\d+):(\d+)/);
-          if (match) {
-            return {
-              row: parseInt(match[1], 10) - 1, // Las líneas en AceEditor son 0-indexadas
-              column: parseInt(match[2], 10),
-              type: 'error',
-              text: line
-            };
-          }
-          return null;
-        }).filter(marker => marker !== null);
-
-        const newMarkers = errorLines.map(errorLine => ({
-          startRow: errorLine.row,
-          startCol: 0,
-          endRow: errorLine.row,
-          endCol: 1,
+        const newMarkers = error.details.map(detail => ({
+          startRow: detail.line - 1,
+          startCol: detail.column,
+          endRow: detail.line - 1,
+          endCol: detail.column + 1,
           className: 'error-marker',
           type: 'text'
         }));
 
-        setMarkers(newMarkers); // Establecer los markers
+        setMarkers(newMarkers);
       }
     } catch (error) {
       setConsoleOutput(`Network error: ${error.message}`);
@@ -102,19 +68,20 @@ const CodeEditorPanel = () => {
           <div
             key={editor.id}
             className={`tab ${activeTab === editor.id ? 'active' : ''}`}
-            onClick={() => handleTabClick(editor.id)}
+            onClick={() => setActiveTab(editor.id)}
           >
             <input 
               type="text" 
               value={editor.name} 
-              onChange={(e) => renameEditor(editor.id, e.target.value)}
+              onChange={(e) => setEditors(editors.map(ed => 
+                ed.id === editor.id ? { ...ed, name: e.target.value } : ed))}
             />
-            <button className="close-tab-button" onClick={(e) => { e.stopPropagation(); removeEditor(editor.id); }}>
+            <button className="close-tab-button" onClick={(e) => { e.stopPropagation(); setEditors(editors.filter(ed => ed.id !== editor.id)); }}>
               <X size={12} />
             </button>
           </div>
         ))}
-        <button className="add-tab-button" onClick={addEditor}>
+        <button className="add-tab-button" onClick={() => setEditors([...editors, { id: uuidv4(), name: 'Untitled', code: '' }])}>
           <Plus size={16} />
         </button>
       </div>
@@ -128,17 +95,21 @@ const CodeEditorPanel = () => {
                   theme="github"
                   name={editor.id}
                   value={editor.code}
-                  onChange={(newCode) => handleCodeChange(editor.id, newCode)}
+                  onChange={(newCode) => setEditors(editors.map(ed => 
+                    ed.id === editor.id ? { ...ed, code: newCode } : ed))}
                   height="500px"
                   width="100%"
                   setOptions={{ 
                     showGutter: true, 
                     useWorker: false
                   }}
-                  markers={markers} // Pasar los markers al editor
+                  markers={markers}
                 />
               </div>
-              <ConsolePanel output={consoleOutput} /> {/* Consola asociada con esta pestaña */}
+              <ConsolePanel 
+                output={consoleOutput} 
+                onLineClick={handleLineClick} 
+              />
             </div>
             <div className="editor-footer">
               <button className="run-button" onClick={() => runCode(editor.code)}>
