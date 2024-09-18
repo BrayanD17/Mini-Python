@@ -1,28 +1,28 @@
 .code-editor-panel {
     display: flex;
     flex-direction: column;
-    height: 70%; /* Ajusta la altura al 70% del contenedor principal */
-    position: relative; /* Necesario para posicionar el botón absoluto dentro de este contenedor */
+    height: 70%; 
+    position: relative; 
 }
 
 .tabs {
     display: flex;
     border-bottom: 1px solid #ccc;
     align-items: center;
-    padding: 0 5px; /* Espacio a los lados de las pestañas */
+    padding: 0 5px; 
 }
 
 .tab {
-    padding: 5px 15px; /* Tamaño más compacto de las pestañas */
+    padding: 5px 15px; 
     cursor: pointer;
     background-color: #f1f1f1;
     border-right: 1px solid #ccc;
-    text-align: left; /* Texto alineado a la izquierda */
+    text-align: left; 
     position: relative;
-    white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
+    white-space: nowrap; 
     display: flex;
     align-items: center;
-    max-width: 150px; /* Limitar el ancho de las pestañas */
+    max-width: 150px; 
 }
 
 .tab.active {
@@ -36,8 +36,8 @@
     border: none;
     background: none;
     text-align: left;
-    padding-left: 5px; /* Espacio entre el texto y el borde de la pestaña */
-    font-size: 14px; /* Tamaño de fuente más pequeño */
+    padding-left: 5px; 
+    font-size: 14px; 
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -72,7 +72,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    margin-left: 5px; /* Espacio entre el botón de nueva pestaña y las pestañas */
+    margin-left: 5px; 
 }
 
 .add-tab-button:hover {
@@ -82,11 +82,11 @@
 .editor-container {
     display: flex;
     flex-direction: row;
-    height: calc(100% - 40px); /* Ajusta la altura del contenedor del editor */
+    height: calc(100% - 40px); 
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
-    position: relative; /* Necesario para posicionar el botón dentro de este contenedor */
+    position: relative; 
 }
 
 .editor-console-wrapper {
@@ -96,34 +96,34 @@
 }
 
 .editor {
-    flex: 2; /* Ajusta el espacio para el editor */
-    border-right: 1px solid #ccc; /* Línea divisoria entre el editor y la consola */
-    margin-right: 10px; /* Espacio entre el editor y la consola */
+    flex: 2;
+    border-right: 1px solid #ccc; 
+    margin-right: 10px; 
 }
 
 .console {
-    flex: 1; /* Aumenta la anchura de la consola */
+    flex: 1; 
 }
 
 .editor-footer {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
-    position: relative; /* Necesario para posicionar el botón dentro de este contenedor */
+    position: relative; 
 }
 
 .run-button {
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 8px 16px; /* Ajusta el tamaño del botón */
+    padding: 8px 16px; 
     cursor: pointer;
     display: flex;
     align-items: center;
     border-radius: 4px;
     position: absolute;
-    bottom: 10px; /* Espacio desde la parte inferior del contenedor */
-    right: 10px; /* Espacio desde el borde derecho del contenedor */
+    bottom: 10px; 
+    right: 10px; 
 }
 
 .run-button:hover {

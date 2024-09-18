@@ -14,7 +14,6 @@ const CodeEditorPanel = () => {
   const [markers, setMarkers] = useState([]);
 
   const handleLineClick = (lineNumber) => {
-    // Establecer el marcador para resaltar la línea en el editor
     setMarkers([{
       startRow: lineNumber - 1,
       startCol: 0,

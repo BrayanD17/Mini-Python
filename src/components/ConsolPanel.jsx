@@ -3,7 +3,7 @@ import '../css/ConsolePanel.css';
 
 const ConsolePanel = ({ output, onLineClick }) => {
   const handleDoubleClick = (event) => {
-    const lineMatch = event.target.innerText.match(/line (\d+)/i); // Coincidencia con la palabra "line" en el error
+    const lineMatch = event.target.innerText.match(/line (\d+)/i); 
     if (lineMatch) {
       const lineNumber = parseInt(lineMatch[1], 10);
       onLineClick(lineNumber);
