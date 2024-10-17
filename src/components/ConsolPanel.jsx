@@ -8,7 +8,7 @@ const ConsolePanel = ({ output, onLineClick }) => {
       const lineNumber = parseInt(lineMatch[1], 10);
       onLineClick(lineNumber);
     }
-  };
+  };  
 
   return (
     <div className="console-panel" onDoubleClick={handleDoubleClick}>

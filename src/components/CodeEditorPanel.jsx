@@ -26,39 +26,43 @@ const CodeEditorPanel = () => {
 
   const runCode = async (code) => {
     try {
-      const response = await fetch('http://localhost:5052/parse', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
+        const response = await fetch('http://localhost:5052/parse', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code }),
+        });
 
-      if (response.ok) {
-        setConsoleOutput("Parsing completed successfully.");
-        setMarkers([]);
-      } else {
-        const error = await response.json();
-        const formattedError = error.details.map(detail =>
-          `Error: Line ${detail.line}:${detail.column}\nDetails: ${detail.message}`).join("\n");
+        if (response.ok) {
+            setConsoleOutput("Parsing completed successfully.");
+            setMarkers([]);
+        } else {
+            const error = await response.json();
+            console.log("Respuesta del servidor:", error); // Verifica la respuesta del servidor
 
-        setConsoleOutput(`Parsing failed:\n${formattedError}`);
+            const formattedError = error.details && error.details.length > 0
+                ? error.details.map(detail => `Error: Line ${detail.line}:${detail.column} - ${detail.message}`).join("\n")
+                : "No details available"; // Manejo de caso en que 'details' es undefined
 
-        const newMarkers = error.details.map(detail => ({
-          startRow: detail.line - 1,
-          startCol: detail.column,
-          endRow: detail.line - 1,
-          endCol: detail.column + 1,
-          className: 'error-marker',
-          type: 'text'
-        }));
+            setConsoleOutput(`Parsing failed:\n${formattedError}`);
 
-        setMarkers(newMarkers);
-      }
+            const newMarkers = error.details ? error.details.map(detail => ({
+                startRow: detail.line - 1,
+                startCol: detail.column,
+                endRow: detail.line - 1,
+                endCol: detail.column + 1,
+                className: 'error-marker',
+                type: 'text'
+            })) : [];
+
+            setMarkers(newMarkers);
+        }
     } catch (error) {
-      setConsoleOutput(`Network error: ${error.message}`);
+        setConsoleOutput(`Network error: ${error.message}`);
     }
-  };
+};
+
 
   return (
     <div className="code-editor-panel">
