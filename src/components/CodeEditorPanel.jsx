@@ -26,14 +26,14 @@ const CodeEditorPanel = () => {
 
   const runCode = async (code) => {
     try {
-        const response = await fetch('http://localhost:5052/parse', {
+          const response = await fetch('http://localhost:5125/parse', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ code }),
         });
-
+        
         if (response.ok) {
             setConsoleOutput("Parsing completed successfully.");
             setMarkers([]);
