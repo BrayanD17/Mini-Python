@@ -26,7 +26,7 @@ const CodeEditorPanel = () => {
 
   const runCode = async (code) => {
     try {
-          const response = await fetch('http://localhost:5125/parse', {
+        const response = await fetch('http://localhost:5125/parse', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,18 +35,21 @@ const CodeEditorPanel = () => {
         });
         
         if (response.ok) {
-            setConsoleOutput("Parsing completed successfully.");
+            const result = await response.json();
+            const { bytecode, output, errorOutput } = result;
+
+            // Formatear la salida combinando bytecode y ejecución
+            const formattedOutput = `Bytecode:\n${bytecode}\n\nExecution Output:\n${output}\n${errorOutput ? `Errors:\n${errorOutput}` : ''}`;
+            setConsoleOutput(formattedOutput);  // Muestra bytecode y salida en el panel de la consola
             setMarkers([]);
         } else {
             const error = await response.json();
-            console.log("Respuesta del servidor:", error); // Verifica la respuesta del servidor
-
             const formattedError = error.details && error.details.length > 0
                 ? error.details.map(detail => `Error: Line ${detail.line}:${detail.column} - ${detail.message}`).join("\n")
-                : "No details available"; // Manejo de caso en que 'details' es undefined
+                : "No details available";
 
             setConsoleOutput(`Parsing failed:\n${formattedError}`);
-
+            
             const newMarkers = error.details ? error.details.map(detail => ({
                 startRow: detail.line - 1,
                 startCol: detail.column,
@@ -61,8 +64,7 @@ const CodeEditorPanel = () => {
     } catch (error) {
         setConsoleOutput(`Network error: ${error.message}`);
     }
-};
-
+  };
 
   return (
     <div className="code-editor-panel">
